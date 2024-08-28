@@ -1,15 +1,15 @@
 import * as React from 'react';
 import {
   WebView,
-  WebViewMessageEvent,
-  WebViewProps,
+  type WebViewMessageEvent,
+  type WebViewProps,
 } from 'react-native-webview';
 import {
   View,
   Text,
   StyleSheet,
-  StyleProp,
-  ViewStyle,
+  type StyleProp,
+  type ViewStyle,
   Platform,
 } from 'react-native';
 import { createHtml } from '../utils/editor-utils';
