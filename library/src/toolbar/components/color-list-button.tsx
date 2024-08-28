@@ -4,7 +4,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  ImageSourcePropType,
+  type ImageSourcePropType,
 } from 'react-native';
 import type { ToggleData, ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
