@@ -33,7 +33,7 @@ interface QuillToolbarProps {
   editor: React.RefObject<QuillEditor>;
   theme: ToolbarTheme | 'dark' | 'light';
   custom?: ToolbarCustom;
-  container?: false | 'avoiding-view' | React.ComponentType;
+  container?: false | 'avoiding-view' | React.ComponentType<any>;
 }
 
 interface ToolbarState {
@@ -92,7 +92,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
   private prepareIconset = () => {
     const { options, custom } = this.props;
     let toolbarOptions: Array<Array<string | object> | string | object> = [];
-    if (options === 'full' || options === []) {
+    if (options === 'full' || options.length === 0) {
       toolbarOptions = fullOptions;
     } else if (options === 'basic') {
       toolbarOptions = basicOptions;
