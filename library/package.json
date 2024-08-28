@@ -1,0 +1,34 @@
+{
+  "name": "react-native-scribe",
+  "version": "1.0.0",
+  "description": "Quill-based rich text editor.",
+  "main": "lib/index.js",
+  "type": "module",
+  "types": "lib/types/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.4",
+    "react": "18.2.0",
+    "react-native": "0.74.5",
+    "react-native-webview": "13.8.6",
+    "typescript": "^5.5.4"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-webview": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damonturcotte/react-native-scribe.git"
+  },
+  "author": "Damon Turcotte",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/damonturcotte/react-native-scribe/issues"
+  },
+  "homepage": "https://github.com/damonturcotte/react-native-scribe#readme"
+}
