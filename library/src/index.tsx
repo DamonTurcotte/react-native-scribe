@@ -1,4 +1,4 @@
-import QuillEditor, { EditorProps } from './editor/quill-editor';
+import QuillEditor, { type EditorProps } from './editor/quill-editor';
 import { QuillToolbar } from './toolbar/quill-toolbar';
 import type {
   EditorEventHandler,
@@ -10,7 +10,7 @@ import type {
   DimensionsChangeData,
 } from './constants/editor-event';
 export default QuillEditor;
-export { QuillToolbar };
+export { QuillEditor, QuillToolbar };
 export type {
   EditorProps,
   EditorEventHandler,
