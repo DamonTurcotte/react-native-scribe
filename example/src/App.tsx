@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import {
   StyleSheet,
@@ -10,12 +12,15 @@ import {
   Text,
 } from 'react-native';
 import { CustomContainer } from './CustomContainer';
-import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
-import type {
-  SelectionChangeData,
-  TextChangeData,
-} from 'react-native-cn-quill';
+import { 
+  QuillEditor,
+  QuillToolbar,
+  type SelectionChangeData,
+  type TextChangeData
+} from "react-native-scribe";
 import { customFonts } from './customFonts';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const clockIcon = require('../assets/icons/clock.png');
 
 export default class App extends React.Component<any, any> {
@@ -60,7 +65,7 @@ export default class App extends React.Component<any, any> {
       if (range.length === 0) {
         console.log('User cursor is on', range.index);
       } else {
-        var text = await this._editor.current?.getText(
+        let text = await this._editor.current?.getText(
           range.index,
           range.length
         );
@@ -206,7 +211,7 @@ export default class App extends React.Component<any, any> {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   root: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
