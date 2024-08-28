@@ -4,7 +4,7 @@ import {
   View,
   Image,
   StyleSheet,
-  ImageSourcePropType,
+  type ImageSourcePropType,
 } from 'react-native';
 import type { ToolbarTheme } from '../../types';
 import { useToolbar } from './toolbar-context';
