@@ -1,4 +1,4 @@
-import type { CustomFont } from 'src/types';
+import type { CustomFont } from '../types';
 import {
   create_quill,
   editor_css,
