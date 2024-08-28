@@ -1,40 +1,32 @@
-const path = require('path');
-const blacklist = require('metro-config/src/defaults/blacklist');
-const escape = require('escape-string-regexp');
-const pak = require('../package.json');
+const { withNxMetro } = require('@nx/expo');
+const { getDefaultConfig } = require('@expo/metro-config');
+const { mergeConfig } = require('metro-config');
 
-const root = path.resolve(__dirname, '..');
+const defaultConfig = getDefaultConfig(__dirname);
+const { assetExts, sourceExts } = defaultConfig.resolver;
 
-const modules = Object.keys({
-  ...pak.peerDependencies,
-});
-
-module.exports = {
-  projectRoot: __dirname,
-  watchFolders: [root],
-
-  // We need to make sure that only one version is loaded for peerDependencies
-  // So we blacklist them at the root, and alias them to the versions in example's node_modules
-  resolver: {
-    blacklistRE: blacklist(
-      modules.map(
-        (m) =>
-          new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`)
-      )
-    ),
-
-    extraNodeModules: modules.reduce((acc, name) => {
-      acc[name] = path.join(__dirname, 'node_modules', name);
-      return acc;
-    }, {}),
-  },
-
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
+const customConfig = {
   transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
+    babelTransformerPath: require.resolve('react-native-svg-transformer'),
+  },
+  resolver: {
+    assetExts: assetExts.filter((ext) => ext !== 'svg'),
+    sourceExts: [...sourceExts, 'cjs', 'mjs', 'svg'],
   },
 };
+
+module.exports = withNxMetro(mergeConfig(defaultConfig, customConfig), {
+  // Change this to true to see debugging info.
+  // Useful if you have issues resolving modules
+  debug: false,
+  // all the file extensions used for imports other than 'ts', 'tsx', 'js', 'jsx', 'json'
+  extensions: [],
+  // Specify folders to watch, in addition to Nx defaults (workspace libraries and node_modules)
+  watchFolders: [],
+});
