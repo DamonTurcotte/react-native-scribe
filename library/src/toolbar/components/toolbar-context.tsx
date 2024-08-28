@@ -43,6 +43,7 @@ interface ProviderProps {
   theme: ToolbarTheme;
   custom?: ToolbarCustom;
   styles?: CustomStyles;
+  children?: React.ReactNode;
 }
 
 interface ProviderState {
