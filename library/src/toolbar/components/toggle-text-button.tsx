@@ -12,7 +12,7 @@ interface Props {
 
 export const ToggleTextButton: React.FC<Props> = (props) => {
   const { apply, isSelected, theme, styles } = useToolbar();
-  const { name, valueOff, valueOn, valueName } = props;
+  const { name, valueOff=false, valueOn, valueName } = props;
   const selected = isSelected(name, valueOn);
   const handlePresss = () => apply(name, selected ? valueOff : valueOn);
   const defaultStyles = makeStyles(theme);
@@ -56,7 +56,3 @@ const makeStyles = (theme: ToolbarTheme) =>
       fontWeight: 'bold',
     },
   });
-
-ToggleTextButton.defaultProps = {
-  valueOff: false,
-};

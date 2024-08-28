@@ -11,7 +11,7 @@ interface Props {
 
 export const ToggleColorButton: React.FC<Props> = (props) => {
   const { apply, isSelected, theme, styles } = useToolbar();
-  const { name, valueOff, valueOn } = props;
+  const { name, valueOff=false, valueOn } = props;
   const selected = isSelected(name, valueOn);
   const handlePresss = () => apply(name, selected ? valueOff : valueOn);
   const defaultStyles = makeStyles(theme);
@@ -66,7 +66,3 @@ const makeStyles = (theme: ToolbarTheme) =>
       transform: [{ rotate: '45deg' }],
     },
   });
-
-ToggleColorButton.defaultProps = {
-  valueOff: false,
-};

@@ -18,7 +18,7 @@ interface Props {
 
 export const ToggleIconButton: React.FC<Props> = (props) => {
   const { apply, isSelected, theme, styles } = useToolbar();
-  const { name, valueOff, valueOn, source } = props;
+  const { name, valueOff=false, valueOn, source } = props;
   const selected = isSelected(name, valueOn);
   const handlePresss = () => apply(name, selected ? valueOff : valueOn);
   const defaultStyles = makeStyles(theme);
@@ -64,7 +64,3 @@ const makeStyles = (theme: ToolbarTheme) =>
       tintColor: theme.color,
     },
   });
-
-ToggleIconButton.defaultProps = {
-  valueOff: false,
-};
