@@ -2,7 +2,7 @@
   "name": "@react-native-scribe/source",
   "version": "1.0.0",
   "workspaces": [
-    "package",
+    "library",
     "example"
   ],
   "scripts": {
