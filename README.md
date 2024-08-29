@@ -1,8 +1,5 @@
-## Important announcement
-"The react-native-cn-quill" is now an open project and I'm no longer **actively maintaining** it. If you're interested in contributing or taking over its maintenance, please feel free to reach out to me!" This message clearly communicates the change in maintenance status and invites interested contributors to get in touch.
-
-# react-native-cn-quill
-react-native-cn-quill is a rich-text editor for react-native. We've created this library on top of Quill Api.
+# react-native-scribe
+A continuation to [react-native-cn-quill](https://github.com/imnapo/react-native-cn-quill) rich text editor for react native.
 
 <img src="./images/quill-editor.jpeg" width="50%">
 
@@ -19,13 +16,13 @@ This package is using `react-native-webview`. Please follow [this document](http
 #### Install using npm:
 
 ```sh
-npm i react-native-cn-quill
+npm i react-native-scribe
 ```
 
 #### Install using yarn:
 
 ```
-yarn add react-native-cn-quill
+yarn add react-native-scribe
 ```
 
 ## Usage
@@ -35,7 +32,7 @@ Here is a simple overview of our components usage.
 ```js
 import React from 'react';
 import { SafeAreaView, StyleSheet, StatusBar } from 'react-native';
-import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
+import { QuillEditor, QuillToolbar } from 'react-native-scribe';
 export default function App() {
   const _editor = React.createRef();
 
@@ -826,10 +823,6 @@ The container component of `QuillToolbar`. you may pass `false` to remove contai
 | `false \| 'avoiding-view' \| React.ComponentType` | No |
 
 ---
-
-# Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
 # License
 
