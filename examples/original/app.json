@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Scribe Text Editor",
-    "slug": "react-native-scribe-example",
+    "name": "Scribe Editor Example - Original",
+    "slug": "react-native-scribe-example-original",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
