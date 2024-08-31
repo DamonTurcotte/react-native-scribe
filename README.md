@@ -1,5 +1,5 @@
 # react-native-scribe
-A continuation to [react-native-cn-quill](https://github.com/imnapo/react-native-cn-quill) rich text editor for react native.
+A continuation of [react-native-cn-quill](https://github.com/imnapo/react-native-cn-quill). A rich text editor for react native.
 
 <img src="./images/quill-editor.jpeg" width="50%">
 
@@ -729,7 +729,7 @@ For example we may add the `image` and `clock` (user defined control that insert
 
 ```
 
-To see an example of how to fully implement this please check this [Link](https://github.com/imnapo/react-native-cn-quill/blob/master/example/src/App.tsx).
+To see an example of how to fully implement this please check this [Link](https://github.com/damonturcotte/react-native-scribe/blob/main/example/src/App.tsx).
 
 ## QuillToolbar Props
 
@@ -826,4 +826,4 @@ The container component of `QuillToolbar`. you may pass `false` to remove contai
 
 # License
 
-MIT
+[MIT](https://github.com/damonturcotte/react-native-scribe/blob/main/LICENSE)
