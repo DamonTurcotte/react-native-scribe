@@ -1,149 +1,84 @@
-/* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as React from 'react';
+import React from 'react';
+import { StyleSheet, Text, View, Pressable, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  StyleSheet,
-  StatusBar,
-  SafeAreaView,
-  TouchableOpacity,
-  TextInput,
-  Alert,
-  View,
-  Text,
-} from 'react-native';
-import { CustomContainer } from './CustomContainer';
-import { 
   QuillEditor,
   QuillToolbar,
   type SelectionChangeData,
   type TextChangeData
-} from "react-native-scribe";
+} from 'react-native-scribe';
+
+import { CustomContainer } from './CustomContainer';
 import { customFonts } from './customFonts';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const clockIcon = require('../assets/icons/clock.png');
 
-export default class App extends React.Component<any, any> {
-  private _editor: React.RefObject<QuillEditor>;
-  constructor(props: any) {
-    super(props);
-    this._editor = React.createRef();
-    this.state = {
-      disabled: false,
-      title: 'react-native-cn-quill',
-    };
-  }
+const App = () => {
+  const editor = React.useRef<QuillEditor>(null);
+  const [disabled, setDisabled] = React.useState(false);
 
-  getCurrentDate() {
-    let d = new Date(),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return [year, month, day].join('-');
-  }
-
-  handleEnable = () => {
-    const { disabled } = this.state;
-    this._editor.current?.enable(disabled);
-    this.setState({ disabled: !disabled });
+  const handleEnable = () => {
+    editor.current?.enable(disabled);
+    setDisabled(!disabled);
   };
 
-  handleGetHtml = () => {
-    this._editor.current?.getHtml().then((res) => {
-      console.log('Html :', res);
-      Alert.alert(res);
+  const handleGetHtml = () => {
+    editor.current?.getHtml().then((html) => {
+      console.log('Html :', html);
+      Alert.alert(html);
     });
-  };
+  }
 
-  handleSelectionChange = async (data: SelectionChangeData) => {
+  const handleSelectionChange = (data: SelectionChangeData) => {
     const { range } = data;
     if (range) {
       if (range.length === 0) {
-        console.log('User cursor is on', range.index);
+        console.log('User cursor is at index', range.index);
       } else {
-        let text = await this._editor.current?.getText(
-          range.index,
-          range.length
-        );
-        console.log('User has highlighted', text);
+        const text = editor.current?.getText(range.index, range.length);
+        console.log('Selected text:', text);
       }
     } else {
-      console.log('Cursor not in the editor');
+      console.log('Cursor is not in editor!');
     }
-  };
+  }
 
-  handleTextChange = (data: TextChangeData) => {
+  const handleTextChange = (data: TextChangeData) => {
     if (data.source === 'api') {
       console.log('An API call triggered this change.');
     } else if (data.source === 'user') {
       console.log('A user action triggered this change.');
     }
-  };
+  }
 
-  customHandler = (name: string, value: any) => {
-    if (name === 'image') {
-      this._editor.current?.insertEmbed(
-        0,
-        'image',
-        'https://picsum.photos/200/300'
-      );
-    } else if (name === 'clock') {
-      this._editor.current?.insertText(0, `Today is ${this.getCurrentDate()}`, {
-        bold: true,
-        color: 'red',
-      });
-    } else {
-      console.log(`${name} clicked with value: ${value}`);
-    }
-  };
+  const handleHtmlChange = ({html}) => console.log(html);
 
-  render() {
-    const { title, disabled } = this.state;
-    return (
-      <SafeAreaView
-        style={styles.root}
-        onTouchStart={() => this._editor.current?.blur()}
-      >
-        <StatusBar
-          animated={true}
-          backgroundColor="#61dafb"
-          barStyle={'dark-content'}
-          showHideTransition={'fade'}
-          hidden={false}
-        />
-        <TextInput
-          style={[styles.input, styles.textbox]}
-          onChangeText={(text) => this.setState({ title: text })}
-          value={title}
-        />
-        <QuillEditor
-          webview={{
-            nestedScrollEnabled: true,
-          }}
-          container={CustomContainer} // not required just to show how to pass cusom container
-          style={[styles.input, styles.editor]}
-          ref={this._editor}
-          onSelectionChange={this.handleSelectionChange}
-          onTextChange={this.handleTextChange}
-          onHtmlChange={({ html }) => console.log(html)}
-          quill={{
-            // not required just for to show how to pass this props
-            placeholder: 'this is placeholder',
-            modules: {
-              toolbar: false, // this is default value
-            },
-            theme: 'snow', // this is default value
-          }}
-          //Extending Blots (from Quill js website example)
-          //You can also extend existing formats.
-          //Here is a quick ES6 implementation of a list item that does not permit formatting its contents.
-          // Code blocks are implemented in exactly this way.
-          customJS={`
-          var ListItem = Quill.import('formats/list/item');
+  const customHandler = () => console.log('Custom handler');
+
+  return (
+    <SafeAreaView
+      style={styles.root}
+      edges={['top', 'left', 'right', 'bottom']}
+    >
+      <QuillEditor
+        ref={editor}
+        webview={{ nestedScrollEnabled: true }}
+        style={styles.editor}
+        container={CustomContainer}
+        onSelectionChange={handleSelectionChange}
+        onTextChange={handleTextChange}
+        onHtmlChange={handleHtmlChange}
+        quill={{
+          placeholder: 'Start typing...',
+          modules: {
+            toolbar: false  // This is the default value
+          },
+          theme: 'snow' // This is the default value
+        }}
+        // Extending Blots
+        customJS={`
+          const ListItem = Quill.import('formats/list/item');
 
           class PlainListItem extends ListItem {
             formatAt(index, length, name, value) {
@@ -151,86 +86,83 @@ export default class App extends React.Component<any, any> {
                 // Allow changing or removing list format
                 super.formatAt(name, value);
               }
-              // Otherwise ignore
+                // Otherwise ignore
             }
           }
-          
-          Quill.register(PlainListItem, true);
-            
-          `}
-          defaultFontFamily={customFonts[0].name}
-          customFonts={customFonts}
-          import3rdParties="cdn" // default value is 'local'
-          initialHtml="<h1>Quill Editor for react-native</h1><img src='https://picsum.photos/200/300'/><br/><p>On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.</p>"
-        />
-        <View style={styles.buttons}>
-          <TouchableOpacity onPress={this.handleEnable} style={styles.btn}>
-            <Text>{disabled === true ? 'Enable' : 'Disable'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this.handleGetHtml} style={styles.btn}>
-            <Text>Html</Text>
-          </TouchableOpacity>
-        </View>
 
-        <QuillToolbar
-          editor={this._editor}
-          theme="light"
-          styles={{
-            toolbar: {
-              provider: (provided) => ({
-                ...provided,
-                borderTopWidth: 0,
-              }),
-              root: (provided) => ({
-                ...provided,
-                backgroundColor: 'orange',
-              }),
-            },
-          }}
-          options={[
-            ['bold', 'italic', 'underline'],
-            [{ header: 1 }, { header: 2 }],
-            [{ align: [] }],
-            [
-              { color: ['#000000', '#e60000', '#ff9900', 'yellow'] },
-              { background: [] },
-            ],
-            [{ font: ['', customFonts[1].name] }],
-            ['image', 'clock'],
-          ]}
-          custom={{
-            handler: this.customHandler,
-            actions: ['image', 'clock'],
-            icons: {
-              clock: clockIcon,
-            },
-          }}
-        />
-      </SafeAreaView>
-    );
-  }
-}
+          Quill.register(PlainListItem, true);
+        `}
+        defaultFontFamily={customFonts[0].name}
+        customFonts={customFonts}
+        import3rdParties='cdn' // Default is local
+        initialHtml="<h1>Quill Editor for react-native</h1><img src='https://picsum.photos/200/300'/><br/><p>On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.</p>"
+      />
+
+      <View style={styles.buttons}>
+        <Pressable style={styles.btn} onPress={handleEnable}>
+          <Text>{disabled === true ? 'Enable' : 'Disable'}</Text>
+        </Pressable>
+        <Pressable style={styles.btn} onPress={handleGetHtml}>
+          <Text>Html</Text>
+        </Pressable>
+      </View>
+
+      <QuillToolbar
+        editor={editor}
+        theme={{
+          background: '#f5f5f5',
+          color: '#000',
+          size: 30,
+          overlay: 'rgba(0,0,0,0.1)',
+        }}
+        styles={{
+          toolbar: {
+            provider: (provided) => ({
+              ...provided,
+              borderTopWidth: 1,
+            }),
+            root: (provided) => ({
+              ...provided,
+              backgroundColor: 'slategray',
+            }),
+          },
+        }}
+        options={[
+          ['bold', 'italic', 'underline'],
+          [{ header: 1 }, { header: 2 }],
+          [{ align: [] }],
+          [
+            { color: ['#000000', '#006000', '#600000', 'goldenrod'] },
+            { background: [] },
+          ],
+          [{ font: ['', customFonts[1].name] }],
+          ['image', 'clock']
+        ]}
+        custom={{
+          handler: customHandler,
+          actions: ['image', 'clock'],
+          icons: {
+            clock: clockIcon,
+          }
+        }}
+      />
+    </SafeAreaView>
+  )
+};
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
     backgroundColor: '#eaeaea',
   },
-  input: {
+  editor: {
+    flex: 1,
+    padding: 0,
     borderColor: 'gray',
     borderWidth: 1,
     marginHorizontal: 30,
     marginVertical: 5,
     backgroundColor: 'white',
-  },
-  textbox: {
-    height: 40,
-    paddingHorizontal: 20,
-  },
-  editor: {
-    flex: 1,
-    padding: 0,
   },
   buttons: {
     flexDirection: 'row',
@@ -244,3 +176,5 @@ const styles = StyleSheet.create({
     margin: 3,
   },
 });
+
+export default App;
